@@ -4,11 +4,13 @@ tamilyogi.cool this is a nice website without the SSL encryption for playing
 movie which means we can get the movie from the website which is more fun
 than have to stream the movie
 '''
+# regex expression http:\/\/[0-9a-zA-Z.\/]+v\.mp4
 #!/usr/bin/python3
 import argparse
 from bs4 import BeautifulSoup
 import requests
 import sys
+import re
 
 parser = argparse.ArgumentParser(description="This is TDownloader v1.0")
 parser.add_argument("-v","--version",action="version",version="%(prog)s 1.0")
@@ -31,9 +33,11 @@ choice = input("Enter the url to open: ")
 response2 = requests.get(srcs[int(choice)])
 parsed_data2 = BeautifulSoup(response2.text,"html.parser")
 scripts = parsed_data2.find_all("script")
-try:
-    for script in scripts:
-        if "jwplayer" in script.text:
-            print(script.text)
-except:
-    print("test")
+count = 0
+for script in scripts:
+    if "sources" in str(script):
+        data = str(script)
+        data = data.replace('"'," ")
+        regex1 = re.compile(r"http:\/\/[0-9a-zA-Z.\/]+v\.mp4")
+        links = regex1.findall(data)
+        print(links)
