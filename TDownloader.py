@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 import requests
 import sys
 import re
+import urllib
 
 parser = argparse.ArgumentParser(description="This is TDownloader v1.0")
 parser.add_argument("-v","--version",action="version",version="%(prog)s 1.0")
@@ -40,4 +41,8 @@ for script in scripts:
         data = data.replace('"'," ")
         regex1 = re.compile(r"http:\/\/[0-9a-zA-Z.\/]+v\.mp4")
         links = regex1.findall(data)
-        print(links)
+        r = requests.get(links[0],stream=True) 
+        with open("test.mp4","wb") as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
