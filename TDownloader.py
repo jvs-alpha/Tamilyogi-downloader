@@ -14,7 +14,7 @@ import re
 parser = argparse.ArgumentParser(description="This is TDownloader v1.0")
 parser.add_argument("-v","--version",action="version",version="%(prog)s 1.0")
 parser.add_argument("url",type=str,help="This is the url of the website")
-parser.add_argumnet("filename",type=str,help="This is the file name to store it with")
+parser.add_argument("filename",type=str,help="This is the file name to store it with")
 argv = parser.parse_args()
 
 url = argv.url
