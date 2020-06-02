@@ -9,13 +9,12 @@ than have to stream the movie
 import argparse
 from bs4 import BeautifulSoup
 import requests
-import sys
 import re
-import urllib
 
 parser = argparse.ArgumentParser(description="This is TDownloader v1.0")
 parser.add_argument("-v","--version",action="version",version="%(prog)s 1.0")
 parser.add_argument("url",type=str,help="This is the url of the website")
+parser.add_argumnet("filename",type=str,help="This is the file name to store it with")
 argv = parser.parse_args()
 
 url = argv.url
@@ -42,7 +41,7 @@ for script in scripts:
         regex1 = re.compile(r"http:\/\/[0-9a-zA-Z.\/]+v\.mp4")
         links = regex1.findall(data)
         r = requests.get(links[0],stream=True) 
-        with open("test.mp4","wb") as f:
+        with open("{}.mp4".format(argv.filename),"wb") as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:
                     f.write(chunk)
