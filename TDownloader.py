@@ -40,6 +40,7 @@ for script in scripts:
         data = data.replace('"'," ")
         regex1 = re.compile(r"http:\/\/[0-9a-zA-Z.\/]+v\.mp4")
         links = regex1.findall(data)
+        print(links[0])
         r = requests.get(links[0],stream=True) 
         with open("{}.mp4".format(argv.filename),"wb") as f:
             for chunk in r.iter_content(chunk_size=1024):
