@@ -20,7 +20,7 @@ argv = parser.parse_args()
 url = argv.url
 
 proxies = {
-        "http":"http://50.233.228.147:8080",
+        "http":"http://142.93.16.163:3128",
         "https":"https://128.199.4.92:3129",
         }
 
