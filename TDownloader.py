@@ -5,11 +5,13 @@
 # than have to stream the movie
 # '''
 # regex expression http:\/\/[0-9a-zA-Z.\/]+v\.mp4
+# regex for M3U8 http:\/\/[0-9a-zA-Z.\/,]+master.m3u8
 #!/usr/bin/env python3
 import argparse
 from bs4 import BeautifulSoup
 import requests
 import re
+from fp.fp import FreeProxy
 
 parser = argparse.ArgumentParser(description="This is TDownloader v1.0")
 parser.add_argument("-v","--version",action="version",version="%(prog)s 1.0")
@@ -19,15 +21,15 @@ argv = parser.parse_args()
 
 url = argv.url
 
-proxies = {
-        "http":"http://142.93.16.163:3128",
-        "https":"https://128.199.4.92:3129",
-        }
-
+def get_proxies():
+    return {"http": FreeProxy(rand=True).get()}
+proxies = get_proxies()
 
 response = requests.get(url, proxies=proxies)
 parsed_data = BeautifulSoup(response.text,"html.parser")
 iframes = parsed_data.find_all("iframe")
+print(proxies)
+print(parsed_data)
 srcs = []
 count = 0
 for iframe in iframes:
@@ -44,11 +46,11 @@ for script in scripts:
     if "sources" in str(script):
         data = str(script)
         data = data.replace('"'," ")
-        regex1 = re.compile(r"http:\/\/[0-9a-zA-Z.\/]+v\.mp4")
+        regex1 = re.compile(r"http:\/\/[0-9a-zA-Z.\/,]+master.m3u8")
         links = regex1.findall(data)
         print(links[0])
         r = requests.get(links[0], proxies=proxies, stream=True) 
-        with open("{}.mp4".format(argv.filename),"wb") as f:
+        with open("{}.m3u8".format(argv.filename),"wb") as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:
                     f.write(chunk)
