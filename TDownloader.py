@@ -28,8 +28,8 @@ proxies = get_proxies()
 response = requests.get(url, proxies=proxies)
 parsed_data = BeautifulSoup(response.text,"html.parser")
 iframes = parsed_data.find_all("iframe")
-print(proxies)
-print(parsed_data)
+# print(proxies)
+# print(parsed_data)
 srcs = []
 count = 0
 for iframe in iframes:
@@ -48,7 +48,8 @@ for script in scripts:
         data = data.replace('"'," ")
         regex1 = re.compile(r"http:\/\/[0-9a-zA-Z.\/,]+master.m3u8")
         links = regex1.findall(data)
-        print(links[0])
+        # print(links)
+        prit(links[0])
         r = requests.get(links[0], proxies=proxies, stream=True) 
         with open("{}.m3u8".format(argv.filename),"wb") as f:
             for chunk in r.iter_content(chunk_size=1024):
